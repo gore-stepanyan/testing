@@ -1,4 +1,5 @@
 from enum import Enum
+from struct import pack
 
 class State(Enum):
         HANDLING_FIRST_PACKET  = "handling_first_packet"
@@ -67,10 +68,10 @@ class PacketHandler(object):
         RTD_average = sum(RTD_array) / len(RTD_array)
         self.data.update(RTD_average = RTD_average)
 
-        # print(self.data["TS_1"])
-        # print(self.data["TS_2"])
-        # print(self.data["DLSR_1"])
-        # print(self.data["DLSR_2"])
+        print(self.data["TS_1"])
+        print(self.data["TS_2"])
+        print(self.data["DLSR_1"])
+        print(self.data["DLSR_2"])
         print(RTD_current / 2)
         print(RTD_average)
 
@@ -92,6 +93,7 @@ class PacketHandler(object):
             rtcp = self.get_rtcp(packet)
 
             print("внимание")
+            print(packet.rtcp)
             DLSR_1 = float(rtcp["rtcp.ssrc.dlsr"]) / 65536 #2^16
             self.data.update(DLSR_1 = DLSR_1)
             self.state = State.HANDLING_THIRD_PACKET
