@@ -1,7 +1,7 @@
 import pyshark
 from packet_handler import PacketHandler
 
-capture = pyshark.LiveCapture(interface="enp5s0", display_filter="rtcp.pt==200 || sip || rtp")
+capture = pyshark.LiveCapture(interface="any", display_filter="rtcp.pt==200 || sip || rtp")
 #capture.sniff(packet_count=1)
 packet_handler = PacketHandler()
  
