@@ -9,7 +9,7 @@ def unpack(packet):
     field_values = packet.sip._all_fields.values()
     return dict(zip(field_names, field_values))
 
-count = 0
+count = 10
 
 for packet in capture:
     print(count)
@@ -17,4 +17,5 @@ for packet in capture:
     if "sip.Method" in sip:
         if sip["sip.Method"] == "INVITE":
             print('method ', sip["sip.Method"], ' catched')
+
     count += 1
