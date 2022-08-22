@@ -1,0 +1,15 @@
+task_1()
+    do_1
+    do_2
+    do_3
+    loop.create_task(task_1)
+
+
+start()
+    loop.create_task(task_1)
+    loop.create_task(task_2)
+    ...
+
+main()
+    some_class_init()
+    loop.run(forever) #(?)
