@@ -1,8 +1,8 @@
 from enum import Enum
-from struct import pack
+import asyncio
 
 class State(Enum):
-    
+        HANDLING_SDP_PACKET    = "handling_sdp_packet" 
         HANDLING_FIRST_PACKET  = "handling_first_packet"
         HANDLING_SECOND_PACKET = "handling_second_packet"
         HANDLING_THIRD_PACKET  = "handling_third_packet"
@@ -26,6 +26,7 @@ class PacketHandler(object):
         }
 
         self.fabric = {
+            State.HANDLING_SDP_PACKET : self.handle_sdp_packet,
             State.HANDLING_FIRST_PACKET  : self.handle_first_packet, 
             State.HANDLING_SECOND_PACKET : self.handle_second_packet, 
             State.HANDLING_THIRD_PACKET  : self.handle_third_packet
@@ -47,7 +48,11 @@ class PacketHandler(object):
         field_values = packet.rtcp._all_fields.values()
         return dict(zip(field_names, field_values))
         
-        #return list(packet.rtcp._all_fields.values())
+    def get_sip(self, packet):
+        field_names = packet.sip._all_fields
+        field_values = packet.sip._all_fields.values()
+        return dict(zip(field_names, field_values))
+
 
     def is_reply(self, packet):
         current_packet_destination_ip  = packet.ip.dst
@@ -75,6 +80,12 @@ class PacketHandler(object):
         print(self.data["DLSR_2"])
         print(RTD_current / 2)
         print(RTD_average)
+
+    def handle_sdp_packet(self, packet):
+        sip = self.get_sip(packet)
+        if 'sip.Method' in sip:
+            if sip['sip.Method'] == 'INVITE':
+                pass
 
     def handle_first_packet(self, packet):
         self.update_packet_cache(packet)
@@ -116,18 +127,12 @@ class PacketHandler(object):
 
             self.compute()  
 
-
-    def print_rtcp(self, packet):
-        field_names = packet.rtcp._all_fields
-        field_values = packet.rtcp._all_fields.values()
-        #print(dict(zip(field_names, field_values)))
-        print(len(list(field_values)))
-
     def on_packet_arrive(self, packet):
         try:
             #print(self.state)
             #self.print_rtcp(packet)
-            self.fabric[self.state](packet)
+            #self.fabric[self.state](packet)
+            print(packet.ip.src)
             return("ok")
         except:
             print("произошло экстренное откисание")

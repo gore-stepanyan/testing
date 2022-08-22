@@ -1,31 +1,33 @@
-import time
+from packet_handler_dev import PacketHandler
 import pyshark
-from packet_handler import PacketHandler
-import socket
+import asyncio
+from concurrent.futures import ThreadPoolExecutor
+import nest_asyncio
 
-capture = pyshark.FileCapture('session_from_ecss_linphone.pcap', display_filter='sdp')
+nest_asyncio.apply()
 
-def unpack(packet):
-    field_names = packet.sip._all_fields
-    field_values = packet.sip._all_fields.values()
-    return dict(zip(field_names, field_values))
+pool = ThreadPoolExecutor()
+loop = asyncio.get_event_loop()
 
-count = 0
+capture = pyshark.FileCapture(input_file='session_from_ecss_linphone.pcap', display_filter="rtcp.pt==200 || sdp || rtp")
+packet_handler = PacketHandler()
 
-def get_self_ip():
-    host_name = socket.gethostname()
-    IP_addres = socket.gethostbyname(host_name)
-    print("Computer IP Address is:" + IP_addres)
+async def listen():
+    for packet in capture:
+        return packet
 
-get_self_ip()
+def handle(packet):
+    return packet_handler.on_packet_arrive(packet)
 
-for packet in capture:
-    print(count)
-    sip = unpack(packet)
-    if "sip.Method" in sip:
-        if (sip["sip.Method"] == "INVITE" or sip["sip.Method"] == "ACK") and sip['sdp.session_name'] != 'ECSS-10':
-            print('method', sip["sip.Method"], 'catched')
-            print('from', sip['sdp.owner.address'])
-            print('session mame', sip['sdp.session_name'])
+async def runner():
+    packet = await listen()
+    result = await loop.run_in_executor(pool, handle, packet)
+    #print(result, " <- result")
+    loop.create_task(runner())
 
-    count += 1
+def main():
+    loop.create_task(runner())
+    loop.run_forever()
+
+if __name__ == "__main__":
+    main()
