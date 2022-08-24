@@ -1,15 +1,24 @@
+from struct import pack
 import pyshark
+from main import listen
 from packet_handler import PacketHandler
-
-capture = pyshark.LiveCapture(interface="any", display_filter="rtcp.pt==200 || sip || rtp")
-#capture.sniff(packet_count=1)
-packet_handler = PacketHandler()
+import datetime
+import time
  
-def on_packet_arrive(packet):
-    packet_handler.on_packet_arrive(packet)
+capture = pyshark.LiveCapture(interface="enp5s0", display_filter='udp', decode_as={'udp.port==8000':'rtp'})
 
-for packet in capture.sniff_continuously():
-    if hasattr(packet, 'rtcp'):
-        on_packet_arrive(packet)
+def get_data(packet):
+    try:
+        field_names = packet.rtp._all_fields
+        field_values = packet.rtp._all_fields.values()
+        return dict(zip(field_names, field_values))
+    except:
+        pass
 
-#capture.apply_on_packets(on_packet_arrive)
+while True:
+    time.sleep(1)
+    capture.sniff(packet_count=5)
+    for packet in capture:
+        print('sniffed', packet.highest_layer)
+    print(capture)
+    capture.clear()

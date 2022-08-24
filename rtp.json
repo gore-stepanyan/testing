@@ -1,0 +1,17 @@
+{
+    "rtp.setup": "Stream setup by SDP (frame 53)",
+    "rtp.setup-frame": "53",
+    "rtp.setup-method": "SDP",
+    "sip.call_id_generated": "067d36216b24c3ce",
+    "rtp.version": "2",
+    "rtp.padding": "0",
+    "rtp.ext": "0",
+    "rtp.cc": "0",
+    "rtp.marker": "1",
+    "rtp.p_type": "8",
+    "rtp.seq": "8750",
+    "rtp.extseq": "74286",
+    "rtp.timestamp": "160",
+    "rtp.ssrc": "0x6b31f6fe",
+    "rtp.payload": "d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5:d5"
+}
